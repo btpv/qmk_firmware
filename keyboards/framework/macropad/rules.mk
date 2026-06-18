@@ -1,0 +1,4 @@
+SRC += matrix.c rgb.c
+ANALOG_DRIVER_REQUIRED = yes
+VIA_ENABLE = yes
+RGB_MATRIX_CUSTOM_USER = yes

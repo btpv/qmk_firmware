@@ -1,0 +1,48 @@
+{
+    "name": "QMK",
+    "mounts": [
+        "type=bind,source=/run/media/btpv/,target=/media/ubuntu/"
+    ],
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--privileged",
+        "-v",
+        "/dev:/dev"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-python.python",
+                "donjayamanne.git-extension-pack",
+                "bierner.github-markdown-preview",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "xaver.clang-format",
+                "EditorConfig.EditorConfig",
+                "LukeVan.qmk-action-button",
+                "ms-vscode.cmake-tools",
+                "twxs.cmake",
+                "KylinIdeTeam.cmake-intellisence"
+            ]
+        },
+        "settings": {
+            "extensions.ignoreRecommendations": true,
+            "terminal.integrated.defaultProfile.linux": "zsh",
+            "terminal.integrated.shell.linux": "/bin/zsh",
+            // tell VSCode that you want the shell to be a login, interactive shell
+            "terminal.integrated.shellArgs.linux": [
+                "-l",
+                "-i"
+            ],
+            "clangd.path": "/usr/lib/llvm-22/bin/clangd",
+            "clang-format.executable": "clang-format",
+            "cmake.cmakePath": "cmake",
+            "cmake.ctestPath": "ctest",
+            "cmake.generator": "Ninja",
+            "cmake.configureOnOpen": true,
+            "lldb.executable": "/usr/bin/lldb"
+        }
+    }
+}
