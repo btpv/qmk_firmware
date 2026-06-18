@@ -1,5 +1,5 @@
-#include QMK_KEYBOARD_H
-#define IS31FL3743A_ENABLE_GPIO GP29
+#include <quantum.h>
+#include "rgb.h"
 
 #define LED_0 {0, SW1_CS3, SW1_CS2, SW1_CS1}
 #define LED_1 {0, SW2_CS3, SW2_CS2, SW2_CS1}
@@ -25,12 +25,6 @@
 #define LED_21 {0, SW2_CS18, SW2_CS17, SW2_CS16}
 #define LED_22 {0, SW3_CS18, SW3_CS17, SW3_CS16}
 #define LED_23 {0, SW4_CS18, SW4_CS17, SW4_CS16}
-
-void keyboard_pre_init_kb(void) {
-    keyboard_pre_init_user();
-    gpio_set_pin_output(IS31FL3743A_ENABLE_GPIO);
-    gpio_write_pin_high(IS31FL3743A_ENABLE_GPIO);
-}
 
 const is31fl3743a_led_t PROGMEM g_is31fl3743a_leds[RGB_MATRIX_LED_COUNT] = {
     /* Refer to IS31 manual for these locations

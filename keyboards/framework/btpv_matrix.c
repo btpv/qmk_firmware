@@ -1,28 +1,11 @@
 #include "analog.h"
 #include "debounce.h"
-#include "print.h"
-#include "matrix.h"
-#include "quantum.h"
+#include "btpv_matrix.h"
 
 #define PAL_MODE_ADC_PULLUP (PAL_MODE_INPUT_ANALOG | PAL_RP_PAD_PUE)
 
-#define SGM_A GP1
-#define SGM_B GP2
-#define SGM_C GP3
-#define SGM_ENABLE GP4
-#define SGM_INPUT GP28
-#define FIRST_ROWPIN GP8
-#define ANALOG_READ(pin) adc_read(pinToMux(pin)) * 3300 / 1023
-#define ANALOG_THRESHOLD 2900
-#define MUXCHCOUNT 4
-#define DRIVEPINS 8
-typedef matrix_row_t Matrix[MATRIX_ROWS];
-typedef uint16_t     AdcMatrix[DRIVEPINS][MUXCHCOUNT];
-typedef bool         AdcValueMatrix[DRIVEPINS][MUXCHCOUNT];
-typedef struct {
-    uint8_t drivePin;
-    uint8_t muxCH;
-} MatrixPosition;
+
+
 void matrix_init_custom(void) {
     // TODO: initialize hardware and global matrix state here
     gpio_set_pin_output(SGM_A);
@@ -68,8 +51,8 @@ void selectMuxCH(uint8_t ch) {
     gpio_write_pin(SGM_C, (index >> 2) & 1);
 }
 void calcMatrixPositionFromAdc(uint8_t drivePin, uint8_t muxCH) {}
+extern const MatrixPosition transformMap[MATRIX_ROWS][MATRIX_COLS];
 bool applyMatrix(Matrix current_matrix, AdcValueMatrix adcValueMatrix) {
-    const MatrixPosition transformMap[MATRIX_ROWS][MATRIX_COLS] = {{{1, 1}, {2, 1}, {4, 3}, {4, 1}}, {{0, 2}, {4, 2}, {1, 0}, {6, 0}}, {{1, 2}, {5, 2}, {2, 0}, {5, 1}}, {{2, 2}, {6, 2}, {3, 0}, {7, 0}}, {{3, 2}, {7, 2}, {4, 0}, {6, 1}}, {{0, 0}, {7, 1}, {5, 0}, {0, 1}}};
     bool                 changed                                = false;
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         matrix_row_t row_value = 0;

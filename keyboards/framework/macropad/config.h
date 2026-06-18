@@ -1,4 +1,6 @@
 #pragma once
+#define DYNAMIC_KEYMAP_LAYER_COUNT 16
+
 // I2C for the RBG controller
 #define I2C_DRIVER I2CD1
 #define I2C1_SDA_PIN GP26
@@ -80,3 +82,5 @@
 // #define ENABLE_RGB_MATRIX_MULTISPLASH
 // #define ENABLE_RGB_MATRIX_SOLID_SPLASH
 // #define ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
+
+

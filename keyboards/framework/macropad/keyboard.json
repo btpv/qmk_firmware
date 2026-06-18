@@ -9,7 +9,6 @@
         "console": true,
         "extrakey": true,
         "nkro": true,
-        // "rgb_matrix": false
         "rgb_matrix": true
     },
     "debounce": 5,
@@ -32,7 +31,6 @@
         ],
         "custom_lite": true
     },
-    // "diode_direction": "COL2ROW",
     "processor": "RP2040",
     "url": "https://fr.mw/FRAKDNEN",
     "usb": {
