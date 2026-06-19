@@ -2,25 +2,26 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "color.h"
+#include <communication.h>
+#include "keyboard.h"
 #include QMK_KEYBOARD_H
+
 enum _layers {
     _BASE,
     _NUMLOCK,
     _GAME,
     _F,
-    _FN,
 };
 enum custom_keycodes {
     PM_PERF = SAFE_RANGE,
     PM_BAL,
     PM_PWRS,
     PASSWD,
-    FN_BTN,
     RST_LG,
 };
 const rgb_t PROGMEM rgb_layout[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = {
-        {{255, 50,000},  {000,000,255},  {000,000,255},  {000,000,255}},
+        {{255,050,000},  {000,000,255},  {000,000,255},  {000,000,255}},
         {{000,000,000},  {000,000,000},  {000,000,000},  {000,000,000}},
         {{000,000,000},  {000,255,000},  {000,000,000},  {000,000,000}},
         {{000,255,000},  {000,255,000},  {000,255,000},  {000,000,000}},
@@ -44,20 +45,20 @@ const rgb_t PROGMEM rgb_layout[][MATRIX_ROWS][MATRIX_COLS] = {
         {{255,000,000},  {255,000,000},  {255,000,000},  {255,000,000}}
     },
     [_F] = {
-        {{000,255,50 },  {000,255,50 },  {000,255,50 },  {000,255,50 }},
-        {{000,255,50 },  {000,255,50 },  {000,255,50 },  {000,255,50 }},
-        {{000,255,50 },  {000,255,50 },  {000,255,50 },  {000,255,50 }},
-        {{000,255,50 },  {000,255,50 },  {000,255,50 },  {000,255,50 }},
-        {{000,255,50 },  {000,255,50 },  {000,255,50 },  {000,255,50 }},
-        {{000,255,50 },  {000,255,50},   {000,255,50 },  {000,255,50}}
+        {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
+        {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
+        {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
+        {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
+        {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
+        {{000,255,050},  {000,255,50},   {000,255,050},  {000,255,050}}
  },
     [_FN] = {
         {{100,000,255},  {000,255,128},  {000,255,128},  {000,255,128}},
-        {{000,000,000},  {175,255,000},  {000,000,000},  {63,63,63}},
-        {{000,000,000},  {000,000,000},  {000,000,000},  {000,000,000}},
-        {{255,000,000},  {000,000,000},  {000,000,000},  {255,000,000}},
-        {{000,255,50 },  {255,050,000},  {255,050,000},  {255, 50,000}},
-        {{255,255,255},  {255,050,000},  {255,000,000},  {000,255,000}}
+        {{255,050,000},  {175,255,000},  {175,255,000},  {063,063,063}},
+        {{000,000,000},  {175,255,000},  {175,255,000},  {000,000,000}},
+        {{255,000,000},  {175,255,000},  {175,255,000},  {255,000,000}},
+        {{000,255,050},  {175,255,000},  {175,255,000},  {255,050,000}},
+        {{255,255,255},  {175,255,000},  {175,255,000},  {000,255,000}}
 }
 };
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -67,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {KC_NO,     KC_UP,     KC_NO,     KC_NO},
         {KC_LEFT,   KC_DOWN,   KC_RGHT,   KC_NO},
         {KC_NO,     KC_NO,     KC_NO,     KC_NO},
-        {FN_BTN,    KC_NO,     KC_NO,     KC_NO}
+        {MO(_FN),    KC_NO,     KC_NO,     KC_NO}
     },
     [_NUMLOCK] = {
         {PASSWD,    KC_MPRV,   KC_MPLY,   KC_MNXT},
@@ -75,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {KC_P7,     KC_P8,     KC_P9,     KC_HOME},
         {KC_P4,     KC_P5,     KC_P6,     KC_END},
         {KC_P1,     KC_P2,     KC_P3,     KC_PENT},
-        {FN_BTN ,   KC_P0,     KC_PDOT,   KC_PCMM}
+        {MO(_FN),   KC_P0,     KC_PDOT,   KC_PCMM}
     },
     [_GAME] = {
         {PB_1,      PB_2,      PB_3,      PB_4},
@@ -83,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {PB_9,      PB_10,     PB_11,     PB_12},
         {PB_13,     PB_14,     PB_15,     PB_16},
         {PB_17,     PB_18,     PB_19,     PB_20},
-        {FN_BTN,    PB_22,     PB_23,     PB_24}
+        {MO(_FN),   PB_22,     PB_23,     PB_24}
     },
     [_F] = {
         {KC_F1,      KC_F2,      KC_F3,      KC_F4},
@@ -91,15 +92,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {KC_F9,      KC_F10,     KC_F11,     KC_F12},
         {KC_F13,     KC_F14,     KC_F15,     KC_F16},
         {KC_F17,     KC_F18,     KC_F19,     KC_F20},
-        {KC_F21,     KC_F22,     KC_F23,     KC_F24}
+        {LT(_FN, KC_F21),KC_F22,     KC_F23,     KC_F24}
     },
     [_FN] = {
         {KC_NUM ,   KC_VOLD,   KC_MUTE,   KC_VOLU} ,
-        {_______,   RST_LG ,   _______,   QK_BOOT},
-        {_______,   _______,   _______,   _______},
-        {TG(_GAME), _______,   _______,   PM_PERF},
+        {RST_LG,    RM_SATU,   RM_SPDU,   QK_BOOT},
+        {_______,   RM_SATD,   RM_SPDD,   _______},
+        {TG(_GAME), RM_HUED,   RM_HUEU,   PM_PERF},
         {TG(_F),    RM_PREV,   RM_NEXT,   PM_BAL} ,
-        {FN_BTN ,   RM_TOGG,   _______,   PM_PWRS}
+        {MO(_FN),   LED_BGS,   LED_RST,   PM_PWRS}
     }
 };
 bool led_update_user(led_t led_state) {
@@ -119,13 +120,36 @@ void keyboard_post_init_user(void) {
         layer_off(_NUMLOCK);
     }
 }
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case FN_BTN:
+        case PM_PERF:
             if (record->event.pressed) {
-                layer_on(_FN);
-            } else {
-                layer_off(_FN);
+                send_command("powerprofilesctl set performance");
+            }
+            return false;
+        case PM_BAL:
+            if (record->event.pressed) {
+                send_command("powerprofilesctl set balanced");
+            }
+            return false;
+        case PM_PWRS:
+            if (record->event.pressed) {
+                send_command("powerprofilesctl set power-saver");
+            }
+            return false;
+        case RST_LG:
+            if (record->event.pressed) {
+                send_command("sudo systemctl restart logid");
+            }
+            return false;
+        case PASSWD:
+            if (record->event.pressed) {
+                register_code(KC_LCTL);
+                register_code(KC_LSFT);
+                tap_code(KC_L);
+                unregister_code(KC_LCTL);
+                unregister_code(KC_LSFT);
             }
             return false;
     }
