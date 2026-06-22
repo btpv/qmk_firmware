@@ -51,7 +51,7 @@ const rgb_t PROGMEM rgb_layout[][MATRIX_ROWS][MATRIX_COLS] = {
         {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
         {{000,255,050},  {000,255,050},  {000,255,050},  {000,255,050}},
         {{000,255,050},  {000,255,50},   {000,255,050},  {000,255,050}}
- },
+    },
     [_FN] = {
         {{100,000,255},  {000,255,128},  {000,255,128},  {000,255,128}},
         {{255,050,000},  {175,255,000},  {175,255,000},  {063,063,063}},
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {KC_NO,     KC_UP,     KC_NO,     KC_NO},
         {KC_LEFT,   KC_DOWN,   KC_RGHT,   KC_NO},
         {KC_NO,     KC_NO,     KC_NO,     KC_NO},
-        {MO(_FN),    KC_NO,     KC_NO,     KC_NO}
+        {MO(_FN),   KC_NO,     KC_NO,     KC_NO}
     },
     [_NUMLOCK] = {
         {PASSWD,    KC_MPRV,   KC_MPLY,   KC_MNXT},
@@ -95,17 +95,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         {LT(_FN, KC_F21),KC_F22,     KC_F23,     KC_F24}
     },
     [_FN] = {
-        {KC_NUM ,   KC_VOLD,   KC_MUTE,   KC_VOLU} ,
+        {KC_NUM,    KC_VOLD,   KC_MUTE,   KC_VOLU} ,
         {RST_LG,    RM_SATU,   RM_SPDU,   QK_BOOT},
         {_______,   RM_SATD,   RM_SPDD,   _______},
         {TG(_GAME), RM_HUED,   RM_HUEU,   PM_PERF},
         {TG(_F),    RM_PREV,   RM_NEXT,   PM_BAL} ,
-        {MO(_FN),   LED_BGS,   LED_RST,   PM_PWRS}
+        {MO(_FN),   RM_TOGG,   LED_RST,   PM_PWRS}
     }
 };
 bool led_update_user(led_t led_state) {
-    // Change layer if numlock state changes, either triggered by OS or
-    // by numlock key on this keyboard
     if (led_state.num_lock) {
         layer_on(_NUMLOCK);
     } else {
@@ -120,7 +118,6 @@ void keyboard_post_init_user(void) {
         layer_off(_NUMLOCK);
     }
 }
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case PM_PERF:
