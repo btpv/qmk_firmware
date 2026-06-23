@@ -1,4 +1,5 @@
 #include <communication.h>
+#include <keyboard.h>
 #include <quantum.h>
 #include "raw_hid.h"
 void send_command(const char *cmd) {

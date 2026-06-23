@@ -18,5 +18,5 @@ typedef struct {
 
 #include QMK_KEYBOARD_H
 typedef matrix_row_t Matrix[MATRIX_ROWS];
-typedef uint16_t     AdcMatrix[DRIVEPINS][MUXCHCOUNT];
-typedef bool         AdcValueMatrix[DRIVEPINS][MUXCHCOUNT];
+typedef uint16_t     AdcMatrix[MATRIX_ROWS][MATRIX_COLS];
+typedef bool         AdcValueMatrix[MATRIX_ROWS][MATRIX_COLS];

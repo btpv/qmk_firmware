@@ -7,14 +7,13 @@
 
 
 void matrix_init_custom(void) {
-    // TODO: initialize hardware and global matrix state here
     gpio_set_pin_output(SGM_A);
     gpio_set_pin_output(SGM_B);
     gpio_set_pin_output(SGM_C);
     gpio_set_pin_output(SGM_ENABLE);
     gpio_set_pin_input(GP6);
     gpio_set_pin_input(GP7);
-    for (uint8_t i = 0; i < DRIVEPINS; i++) {
+    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         gpio_set_pin_output(FIRST_ROWPIN + i);
     }
     palSetLineMode(GP28, PAL_MODE_ADC_PULLUP);
@@ -50,15 +49,12 @@ void selectMuxCH(uint8_t ch) {
     gpio_write_pin(SGM_B, (index >> 1) & 1);
     gpio_write_pin(SGM_C, (index >> 2) & 1);
 }
-void calcMatrixPositionFromAdc(uint8_t drivePin, uint8_t muxCH) {}
-extern const MatrixPosition transformMap[MATRIX_ROWS][MATRIX_COLS];
 bool applyMatrix(Matrix current_matrix, AdcValueMatrix adcValueMatrix) {
     bool                 changed                                = false;
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         matrix_row_t row_value = 0;
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-            MatrixPosition pos = transformMap[row][col];
-            row_value += adcValueMatrix[pos.drivePin][pos.muxCH] << col;
+            row_value += adcValueMatrix[row][col] << col;
         }
         changed |= current_matrix[row] != row_value;
         current_matrix[row] = row_value;
@@ -67,7 +63,7 @@ bool applyMatrix(Matrix current_matrix, AdcValueMatrix adcValueMatrix) {
 }
 bool matrix_scan_custom(Matrix current_matrix) {
     bool changed = false;
-    for (uint8_t col = 0; col < DRIVEPINS; col++) {
+    for (uint8_t col = 0; col < MATRIX_ROWS; col++) {
         gpio_write_pin_high(FIRST_ROWPIN + col);
     }
     gpio_write_pin(SGM_ENABLE, 0);
@@ -75,9 +71,9 @@ bool matrix_scan_custom(Matrix current_matrix) {
     AdcMatrix      adcMatrix;
     AdcValueMatrix adcValueMatrix;
 
-    for (uint8_t drivePin = 0; drivePin < DRIVEPINS; drivePin++) {
+    for (uint8_t drivePin = 0; drivePin < MATRIX_ROWS; drivePin++) {
         gpio_write_pin_low(FIRST_ROWPIN + drivePin);
-        for (uint8_t muxCH = 0; muxCH < MUXCHCOUNT; muxCH++) {
+        for (uint8_t muxCH = 0; muxCH < MATRIX_COLS; muxCH++) {
             selectMuxCH(muxCH);
             // wait_us(500);
             adcMatrix[drivePin][muxCH] = ANALOG_READ(SGM_INPUT);
@@ -87,9 +83,9 @@ bool matrix_scan_custom(Matrix current_matrix) {
     }
     gpio_write_pin(SGM_ENABLE, 1);
     // TODO: add matrix scanning routine here
-    for (uint8_t muxCH = 0; muxCH < MUXCHCOUNT; muxCH++) {
+    for (uint8_t muxCH = 0; muxCH < MATRIX_COLS; muxCH++) {
         uint8_t pressed_in_row = 0;
-        for (int drivePin = 0; drivePin < DRIVEPINS; drivePin++) {
+        for (int drivePin = 0; drivePin < MATRIX_ROWS; drivePin++) {
             if (adcMatrix[drivePin][muxCH] < ANALOG_THRESHOLD) {
                 pressed_in_row += 1;
             }
@@ -110,19 +106,14 @@ bool matrix_scan_custom(Matrix current_matrix) {
                 threshold = ANALOG_THRESHOLD;
                 break;
         }
-        for (int drivePin = 0; drivePin < DRIVEPINS; drivePin++) {
+        for (int drivePin = 0; drivePin < MATRIX_ROWS; drivePin++) {
             adcValueMatrix[drivePin][muxCH] = adcMatrix[drivePin][muxCH] < threshold;
+            if (adcMatrix[drivePin][muxCH] < threshold){
+            printf("row: %d, col: %d, led index: %d\n",drivePin,muxCH,g_led_config.matrix_co[drivePin][muxCH]);
+
+            }
         }
     }
     changed |= applyMatrix(current_matrix, adcValueMatrix);
-    if (changed) {
-        for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-            printf("Row %u: ", row);
-            for (int i = 8 - 1; i >= 0; i--) {
-                printf("%d", (current_matrix[row] >> i) & 1);
-            }
-            printf("\n");
-        }
-    }
     return changed;
 }

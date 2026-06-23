@@ -1,0 +1,3 @@
+SRC += rgb.c
+# VIA_ENABLE = yes
+# PROGRAMMABLE_BUTTON_ENABLE = yes

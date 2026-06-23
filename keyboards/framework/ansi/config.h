@@ -8,9 +8,12 @@
 // #define RGB_MATRIX_IS31FL3743A
 #define IS31FL3743A_I2C_ADDRESS_1 0x20
 #define IS31FL3743A_I2C_ADDRESS_2 0x23
+#define DRIVER_1_LED_TOTAL 48
+#define DRIVER_2_LED_TOTAL 49
+#define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
 // Enable only the first 4 SW and disable software shutdown
 // Otherwise voltage on SW pins without LEDs causes voltage rise and noise
-#define ISSI_CONFIGURATION 0x71
+#define ISSI_CONFIGURATION 0x21
 
 // Limit current to ensure max current draw is just about 500mA
 // when white at 100% brightness

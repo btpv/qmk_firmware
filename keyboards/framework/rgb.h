@@ -4,3 +4,4 @@
 #define rgbOff gpio_write_pin_low(IS31FL3743A_ENABLE_GPIO);
 #define rgbOn gpio_write_pin_high(IS31FL3743A_ENABLE_GPIO);
 #define color(r,g,b) ((rgb_t){r,g,b})
+#include QMK_KEYBOARD_H
