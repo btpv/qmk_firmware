@@ -37,6 +37,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         case CM_CLOSE:
             comState = closed;
             break;
+#ifdef RGB_MATRIX_ENABLE
         case MSG_TYPE_SET_BRIGHTNESS:
             uint8_t brightnessLevelTarget = ((uint16_t)data[1] * 15 / 255) + 1;
             if (rgb_matrix_get_val() / 16 + 1 == brightnessLevelTarget) break;
@@ -52,7 +53,21 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             }
             printf("newbrightness %d\n", rgb_matrix_get_val() / 16 + 1);
             break;
-        case MSG_TYPE_FN_RECV:
+        case MSG_TYPE_EFFECT:
+            justRecivedEffectData = true;
+            uint64_t new_value;
+            memcpy(&new_value, data + 1, 8);
+            rgb_matrix_mode(data[0]);
+            rgb_matrix_set_speed(data[1]);
+            rgb_matrix_sethsv(data[2], data[3], rgb_matrix_get_val());
+            if (data[5]) {
+                rgb_matrix_enable();
+            } else {
+                rgb_matrix_disable();
+            }
+            break;
+#endif
+        case MSG_TYPE_FN:
             if (data[1] == 0x01) {
                 layer_on(_FN);
             } else {
@@ -61,4 +76,30 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             break;
     }
     if (data[0] != CM_ACK) send_rawmsg(CM_ACK, data[0]);
+}
+
+bool    justRecivedEffectData = false;
+
+void            housekeeping_task_kb(void) {
+    #ifdef syncrgb
+    static uint64_t last_rgb_config = 0;
+    if ((rgb_matrix_config.raw & RGBCONFIGMASK) != (last_rgb_config & RGBCONFIGMASK)) {
+        if (justRecivedEffectData) {
+            justRecivedEffectData = false;
+            last_rgb_config = rgb_matrix_config.raw;
+        } else {
+
+            uint8_t buf[31] = {0};
+            buf[0]          = rgb_matrix_get_mode();
+            buf[1]          = rgb_matrix_get_speed();
+            buf[2]          = rgb_matrix_get_hue();
+            buf[3]          = rgb_matrix_get_sat();
+            buf[4]          = rgb_matrix_get_val();
+            buf[5]          = rgb_matrix_is_enabled();
+
+            send_rawarray(MSG_TYPE_EFFECT, buf);
+            last_rgb_config = rgb_matrix_config.raw;
+        }
+    }
+    #endif
 }

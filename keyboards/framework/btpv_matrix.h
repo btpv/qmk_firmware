@@ -4,6 +4,7 @@ typedef struct {
     uint8_t drivePin;
     uint8_t muxCH;
 } MatrixPosition;
+
 #define matrixPos
 
 #define SGM_A GP1

@@ -1,10 +1,8 @@
 #include "analog.h"
 #include "debounce.h"
 #include "btpv_matrix.h"
-
+#include "sleep.h"
 #define PAL_MODE_ADC_PULLUP (PAL_MODE_INPUT_ANALOG | PAL_RP_PAD_PUE)
-
-
 
 void matrix_init_custom(void) {
     gpio_set_pin_output(SGM_A);
@@ -50,7 +48,7 @@ void selectMuxCH(uint8_t ch) {
     gpio_write_pin(SGM_C, (index >> 2) & 1);
 }
 bool applyMatrix(Matrix current_matrix, AdcValueMatrix adcValueMatrix) {
-    bool                 changed                                = false;
+    bool changed = false;
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         matrix_row_t row_value = 0;
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
@@ -62,6 +60,7 @@ bool applyMatrix(Matrix current_matrix, AdcValueMatrix adcValueMatrix) {
     return changed;
 }
 bool matrix_scan_custom(Matrix current_matrix) {
+    if (handle_idle()) return false;
     bool changed = false;
     for (uint8_t col = 0; col < MATRIX_ROWS; col++) {
         gpio_write_pin_high(FIRST_ROWPIN + col);
@@ -77,7 +76,6 @@ bool matrix_scan_custom(Matrix current_matrix) {
             selectMuxCH(muxCH);
             // wait_us(500);
             adcMatrix[drivePin][muxCH] = ANALOG_READ(SGM_INPUT);
-            // uprintf("r:%u c:%u ADC: %u\n", row, col, adc_read(SGM_INPUT));
         }
         gpio_write_pin_high(FIRST_ROWPIN + drivePin);
     }
@@ -108,10 +106,6 @@ bool matrix_scan_custom(Matrix current_matrix) {
         }
         for (int drivePin = 0; drivePin < MATRIX_ROWS; drivePin++) {
             adcValueMatrix[drivePin][muxCH] = adcMatrix[drivePin][muxCH] < threshold;
-            if (adcMatrix[drivePin][muxCH] < threshold){
-            printf("row: %d, col: %d, led index: %d\n",drivePin,muxCH,g_led_config.matrix_co[drivePin][muxCH]);
-
-            }
         }
     }
     changed |= applyMatrix(current_matrix, adcValueMatrix);
