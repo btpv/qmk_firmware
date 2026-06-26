@@ -1,7 +1,10 @@
 #pragma once
 #include <stdbool.h>
 #include <stdint.h>
-// #define syncrgb
+#include QMK_KEYBOARD_H
+#ifndef RGB_MATRIX_MINIMAL_BRIGHTNESS
+#define RGB_MATRIX_MINIMAL_BRIGHTNESS 0
+#endif
 #define RGBCONFIGMASK ~((uint64_t)0xFF << (3 * 8))
 enum msg_type {
     // sync effects
