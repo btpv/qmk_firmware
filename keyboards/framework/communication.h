@@ -15,7 +15,6 @@ enum msg_type {
     MSG_TYPE_FN = 0x10,
     MSG_TYPE_EFFECT,
     MSG_TYPE_CMD = 0x20,
-    MSG_TYPE_CMD_PRT,
     MSG_TYPE_SET_BRIGHTNESS = 0x30,
 };
 enum comStateType { closed, buzy, ready };
@@ -23,5 +22,5 @@ enum comStateType { closed, buzy, ready };
 extern enum comStateType comState;
 bool    send_rawarray(uint8_t type, const uint8_t value[31]);
 bool    send_rawmsg(uint8_t type, uint8_t value);
-void    send_command(const char command[]);
+void    send_command(char command[]);
 bool    justRecivedEffectData;
