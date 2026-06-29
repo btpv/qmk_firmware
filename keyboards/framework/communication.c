@@ -36,6 +36,7 @@ bool send_rawarray(uint8_t type, const uint8_t value[31]) {
 }
 
 void raw_hid_receive(uint8_t *data, uint8_t length) {
+    if (data[0] != CM_ACK) send_rawmsg(CM_ACK, data[0]);
     switch (data[0]) {
         case CM_OPEN:
         case CM_ACK:
@@ -73,7 +74,6 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             }
             break;
     }
-    if (data[0] != CM_ACK) send_rawmsg(CM_ACK, data[0]);
 }
 
 bool justRecivedEffectData = false;

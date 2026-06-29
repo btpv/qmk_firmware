@@ -23,7 +23,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
     return process_record_user(keycode, record);
 }
-layer_state_t layer_state_set_kb(layer_state_t state) {
-    send_rawmsg(MSG_TYPE_FN, layer_state_cmp(state, _FN));
-    return layer_state_set_user(state);
+static layer_state_t lastLayerState;
+layer_state_t layer_state_set_kb(layer_state_t currentLayerState) {
+    if (layer_state_cmp(currentLayerState, _FN) != layer_state_cmp(lastLayerState, _FN)){
+        send_rawmsg(MSG_TYPE_FN, layer_state_cmp(currentLayerState, _FN));
+        lastLayerState = currentLayerState;
+    }
+    return layer_state_set_user(currentLayerState);
 }
