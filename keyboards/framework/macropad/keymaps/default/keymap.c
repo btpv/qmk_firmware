@@ -34,7 +34,7 @@ const rgb_t PROGMEM rgb_layout[][RGB_MATRIX_LED_COUNT] = {
         {100,000,255},  {100,000,255},  {100,000,255},  {255,000,255},
         {100,000,255},  {100,000,255},  {100,000,255},  {255,000,255},
         {100,000,255},  {100,000,255},  {100,000,255},  {000,255,000},
-        {255,255,255},  {100,000,255},  {000,255,128},  {000,255,128}
+        {255,255,255},  {100,000,255},  {000,255,128},  {255,255,000}
     },
     [_GAME] = {
         {255,000,000},  {255,000,000},  {255,000,000},  {255,000,000},
@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_P7,     KC_P8,     KC_P9,     KC_HOME,
         KC_P4,     KC_P5,     KC_P6,     KC_END,
         KC_P1,     KC_P2,     KC_P3,     KC_PENT,
-        MO(_FN),   KC_P0,     KC_PDOT,   KC_PCMM
+        MO(_FN),   KC_P0,     KC_PDOT,   KC_CALC
     ),
     [_GAME] = LAYOUT(
         PB_1,      PB_2,      PB_3,      PB_4,
@@ -95,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     LT(_FN, KC_F21),KC_F22,     KC_F23,     KC_F24
     ),
     [_FN] = LAYOUT(
-        KC_NUM,    KC_VOLD,   KC_MUTE,   KC_VOLU ,
+        KC_NUM,    KC_VOLD,   KC_MUTE,   KC_VOLU,
         RST_LG,    RM_SATU,   RM_SPDU,   QK_BOOT,
         _______,   RM_SATD,   RM_SPDD,   _______,
         TG(_GAME), RM_HUED,   RM_HUEU,   PM_PERF,
@@ -122,17 +122,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case PM_PERF:
             if (record->event.pressed) {
-                send_command("powerprofilesctl set performance");
+                send_command("sudo powerprofilesctl set performance");
             }
             return false;
         case PM_BAL:
             if (record->event.pressed) {
-                send_command("powerprofilesctl set balanced");
+                send_command("sudo powerprofilesctl set balanced");
             }
             return false;
         case PM_PWRS:
             if (record->event.pressed) {
-                send_command("powerprofilesctl set power-saver");
+                send_command("sudo powerprofilesctl set power-saver");
             }
             return false;
         case RST_LG:

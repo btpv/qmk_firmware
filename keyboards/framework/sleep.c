@@ -68,6 +68,7 @@ void keyboard_pre_init_kb(void) {
     gpio_set_pin_output(BOOT_DONE_GPIO);
     gpio_write_pin_low(BOOT_DONE_GPIO);
     gpio_set_pin_input(SLEEP_GPIO);
+
 }
 
 /**
@@ -80,8 +81,8 @@ void suspend_power_down_kb(void) {
 }
 
 /**
- * Called by QMK when the keyboard wakes up from suspend
- */
+* Called by QMK when the keyboard wakes up from suspend
+*/
 void suspend_wakeup_init_kb(void) {
     suspend_wakeup_init_user();
     isSuspended = false;

@@ -23,6 +23,14 @@
         "pid": "0x0012",
         "vid": "0x32AC"
     },
+    "host":{
+      "default":{
+        "nkro": true
+      }
+    },
+    "indicators": {
+        "caps_lock": "GP24"
+    },
     "matrix_pins": {
         "cols": [
             "GP28",
