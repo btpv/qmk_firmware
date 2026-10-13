@@ -36,12 +36,24 @@ static bool user_map(effect_params_t *params) {
             // printf("%d,%d layer %d (%d deep)\n", col, row, layer, layerDepth);
             uint8_t divider = layerDepth > 0 ? (2 << layerDepth) : 1;
             rgb_t   c       = rgb_layout[layer][ledOrderMap[row][col]];
-            if ((get_mods() | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT) {
-                if ((activeKeycode >= KC_A && activeKeycode <= KC_Z)) {
-                    c = color(255, 0, 255);
+            if (IS_LAYER_OFF(_FN)) {
+                if ((get_mods() | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT) {
+                    if ((activeKeycode >= KC_A && activeKeycode <= KC_Z)) {
+                        c = color(255, 0, 255);
 
-                } else if ((activeKeycode >= KC_1 && activeKeycode <= KC_0) || (activeKeycode >= KC_MINUS && activeKeycode <= KC_SLASH) || (activeKeycode == KC_NONUS_BACKSLASH)) {
-                    c = color(0, 255, 255);
+                    } else if ((activeKeycode >= KC_1 && activeKeycode <= KC_0) || (activeKeycode >= KC_MINUS && activeKeycode <= KC_SLASH) || (activeKeycode == KC_NONUS_BACKSLASH)) {
+                        c = color(0, 255, 255);
+                    }
+                }
+                if ((get_mods() | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_CTRL) {
+                    c.g +=100;
+                }
+                if ((get_mods() | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_ALT) {
+                    c.b +=100;
+                }
+                if ((get_mods() | get_weak_mods() | get_oneshot_mods()) & MOD_MASK_GUI) {
+                    c.b +=100;
+                    c.g +=100;
                 }
             }
             // printf("row: %d, col: %d, led index: %d rgb index: %d rgb (%d,%d,%d)\n", row, col, led_index, index,c.r,c.g,c.b);
