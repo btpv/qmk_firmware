@@ -1,15 +1,16 @@
 {
     "name": "QMK",
     "mounts": [
-        "type=bind,source=/run/media/btpv/,target=/media/ubuntu/"
+	//"/dev:/dev"
+        "source=/dev,target=/dev,type=bind"
     ],
     "build": {
         "dockerfile": "Dockerfile"
     },
     "runArgs": [
         "--privileged",
-        "-v",
-        "/dev:/dev"
+//        "-v",
+//        "/dev:/dev"
     ],
     "customizations": {
         "vscode": {
