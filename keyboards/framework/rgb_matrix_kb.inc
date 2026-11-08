@@ -10,5 +10,5 @@ RGB_MATRIX_EFFECT(user_map)
 #define scale(c) c.r *(brightness / divider), (c.g * brightness) / divider, (c.b * brightness) / divider
 // rgb_matrix_set_color(i, scale(c));
 #ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#include <rgbEffect.h>
+#    include <rgbEffect.h>
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS

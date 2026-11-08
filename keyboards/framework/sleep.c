@@ -1,12 +1,12 @@
 #include "sleep.h"
 #include "rgb.h"
 #include <quantum.h>
-static bool isSuspended = false;
+static bool isSuspended   = false;
 static bool prevLidClosed = false;
-bool handle_idle(void) {
-    bool lidClosed = !gpio_read_pin(SLEEP_GPIO);
+bool        handle_idle(void) {
+    bool lidClosed  = !gpio_read_pin(SLEEP_GPIO);
     bool lidChanged = lidClosed != prevLidClosed;
-    prevLidClosed = lidClosed;
+    prevLidClosed   = lidClosed;
 
     /* If lid is closed and the keyboard is not currently suspended, we need to
      * suspend the keyboard.
@@ -61,14 +61,12 @@ void keyboard_pre_init_kb(void) {
     gpio_set_pin_output(IS31FL3743A_ENABLE_GPIO);
     rgbOn;
 
-
     // Mark boot as done.
     // Before this, when holding down both alt keys QSPI_SS is pulled low to put
     // the RP2040 in bootloader mode during reset.
     gpio_set_pin_output(BOOT_DONE_GPIO);
     gpio_write_pin_low(BOOT_DONE_GPIO);
     gpio_set_pin_input(SLEEP_GPIO);
-
 }
 
 /**
@@ -81,8 +79,8 @@ void suspend_power_down_kb(void) {
 }
 
 /**
-* Called by QMK when the keyboard wakes up from suspend
-*/
+ * Called by QMK when the keyboard wakes up from suspend
+ */
 void suspend_wakeup_init_kb(void) {
     suspend_wakeup_init_user();
     isSuspended = false;

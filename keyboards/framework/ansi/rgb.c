@@ -141,7 +141,7 @@
 #define LED_1_64 {0x01,0xc2,0xc1,0xc0}
 #define LED_1_65 {0x01,0xc5,0xc4,0xc3}
 #define LED_1_66 {0x01,0xc8,0xc7,0xc6}
-
+// clang-format on
 const is31fl3743a_led_t PROGMEM g_is31fl3743a_leds[RGB_MATRIX_LED_COUNT] = {
     // driver 0
     LED_0_0,
@@ -428,3 +428,5 @@ ledOrderMap_t ledOrderMap = {
     {  8, 77,255,255,255,255,255,255},
     { 54,255, 53,255, 26, 27, 40, 45}
 };
+
+// clang-format on

@@ -2,14 +2,14 @@
 #include <keyboard.h>
 #include <quantum.h>
 #include "raw_hid.h"
-static bool commandWaiting = false;
-static char *command;
+static bool    commandWaiting = false;
+static char   *command;
 static uint8_t commandIndex = 0;
 
 void send_command(char *cmd) {
-    command = cmd;
+    command        = cmd;
     commandWaiting = true;
-    commandIndex = 0;
+    commandIndex   = 0;
     // register_code(KC_LALT);
     // tap_code(KC_F2);
     // unregister_code(KC_LALT);
@@ -46,13 +46,14 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             comState = closed;
             break;
 #ifdef RGB_MATRIX_ENABLE
-        case MSG_TYPE_SET_BRIGHTNESS:
+        case MSG_TYPE_SET_BRIGHTNESS: {
             uint8_t brightnessLevelTarget = ((uint16_t)data[1] * (255 - RGB_MATRIX_MINIMAL_BRIGHTNESS) / 255) + RGB_MATRIX_MINIMAL_BRIGHTNESS;
             printf("target brightness %d\t", brightnessLevelTarget);
             printf("brightness %d\t", rgb_matrix_get_val());
             rgb_matrix_sethsv(rgb_matrix_get_hue(), rgb_matrix_get_sat(), brightnessLevelTarget);
             printf("newbrightness %d\n", rgb_matrix_get_val());
             break;
+        }
         case MSG_TYPE_EFFECT:
             justRecivedEffectData = true;
             rgb_matrix_mode(data[1] >> 1);
@@ -79,11 +80,11 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 bool justRecivedEffectData = false;
 
 void housekeeping_task_kb(void) {
-    if (commandWaiting && comState == ready){
+    if (commandWaiting && comState == ready) {
         uint8_t length  = strlen(command) - commandIndex < 31 ? strlen(command) - commandIndex : 31;
         uint8_t buf[31] = {0};
-        printf("cmd %s\nsending [%d:%d] with size of %d\n",command,commandIndex,commandIndex+length,length);
-        memcpy(&buf, command+commandIndex, length);
+        printf("cmd %s\nsending [%d:%d] with size of %d\n", command, commandIndex, commandIndex + length, length);
+        memcpy(&buf, command + commandIndex, length);
         // printf("buf %s\n", buf);
         send_rawarray(MSG_TYPE_CMD, buf);
         commandIndex += length;

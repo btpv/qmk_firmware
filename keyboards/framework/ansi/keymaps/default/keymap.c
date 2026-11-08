@@ -15,6 +15,7 @@ enum custom_keycodes {
     PASSWD,
     RST_LG,
 };
+// clang-format off
 const rgb_t PROGMEM rgb_layout[][RGB_MATRIX_LED_COUNT] = {
     [_BASE] = {
         {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000}, {255, 000, 000},
@@ -97,3 +98,4 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
+// clang-format on

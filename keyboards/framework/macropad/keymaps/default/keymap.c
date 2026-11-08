@@ -19,6 +19,7 @@ enum custom_keycodes {
     PASSWD,
     RST_LG,
 };
+// clang-format off
 const rgb_t PROGMEM rgb_layout[][RGB_MATRIX_LED_COUNT] = {
     [_BASE] = {
         {255,050,000},  {000,000,255},  {000,000,255},  {000,000,255},
@@ -103,6 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MO(_FN),   RM_TOGG,   LED_RST,   PM_PWRS
     )
 };
+// clang-format on
 bool led_update_user(led_t led_state) {
     if (led_state.num_lock) {
         layer_on(_NUMLOCK);
