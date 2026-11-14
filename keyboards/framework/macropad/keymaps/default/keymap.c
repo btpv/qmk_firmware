@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         PB_9,      PB_10,     PB_11,     PB_12,
         PB_13,     PB_14,     PB_15,     PB_16,
         PB_17,     PB_18,     PB_19,     PB_20,
-        MO(_FN),   PB_22,     PB_23,     PB_24
+LT(_FN, PB_21),    PB_22,     PB_23,     PB_24
     ),
     [_F] = LAYOUT(
         KC_F1,      KC_F2,      KC_F3,      KC_F4,

@@ -1,6 +1,6 @@
 #pragma once
 #define DYNAMIC_KEYMAP_LAYER_COUNT 16
-#define RGB_MATRIX_MINIMAL_BRIGHTNESS 25
+#define RGB_MATRIX_MINIMAL_BRIGHTNESS 0
 
 // I2C for the RBG controller
 #define I2C_DRIVER I2CD1
